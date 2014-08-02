@@ -14,20 +14,20 @@ class IncompleteElectionException extends RuntimeException
 	{
 		super();
 	}
-	
+
 	public IncompleteElectionException(String message)
 	{
 		super(message);
 	}
-	
+
 	public IncompleteElectionException(String message, Throwable cause)
 	{
 		super(message, cause);
 	}
-	
+
 	public IncompleteElectionException(Throwable cause)
 	{
 		super(cause);
 	}
-	
+
 }

@@ -1,5 +1,7 @@
+import com.google.common.collect.ImmutableSet;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -9,12 +11,12 @@ public class Voter
 	//Lower values represent left-leaning preferences and vice versa.
 	private final int socPref;
 	private final int econPref;
-	
+
 	//Ratios for how much importance is placed between the two preferences and
 	//a party's competence. This results in a linear combination.
 	private final int prefRatio;
 	private final int compRatio;
-	
+
 	/**
 	 * Constructs a voter with the given preferences and ratios.
 	 * @param socPref the voter's social preference.
@@ -34,14 +36,14 @@ public class Voter
 			throw new IllegalArgumentException("The preference ratio is out of range");
 		if(compRatio < 0 || compRatio > 100)
 			throw new IllegalArgumentException("The competence ratio is out of range");
-	
+
 		//initialize the values
 		this.socPref = socPref;
 		this.econPref = econPref;
 		this.prefRatio = prefRatio;
 		this.compRatio = compRatio;
 	}
-	
+
 	/**
 	 * Constructs a voter with the given preferences. The voter will have
 	 * preference and competence ratios of 50.
@@ -61,7 +63,7 @@ public class Voter
 	{
 		return socPref;
 	}
-	
+
 	/**
 	 * Returns the voter's economic preference.
 	 * @return the voter's economic preference.
@@ -110,19 +112,19 @@ public class Voter
 	}
 
 	/**
-	 * Returns the euclidian difference between the voter's preferences and a 
+	 * Returns the euclidian difference between the voter's preferences and a
 	 * given party's policies.
 	 * @param p the party from which the difference is to be calculated.
-	 * @return the euclidian difference between the voter's preferences and a 
+	 * @return the euclidian difference between the voter's preferences and a
 	 * given party's policies.
 	 */
 	public double getTotalDistance(Party p)
 	{
 		int socDis = getSocialDifference(p);
-		int econDis = getEconomicDifference(p); 
+		int econDis = getEconomicDifference(p);
 		return Math.sqrt(socDis*socDis + econDis*econDis);
 	}
-	
+
 	/**
 	 * Takes a set of parties and returns a list of the same parties ordered by
 	 * descending preference.
@@ -130,16 +132,16 @@ public class Voter
 	 * @return a list of the same parties ordered by
 	 * descending preference.
 	 */
-	public List<Party> getPartyPreferences(Set<Party> parties)
+	public ImmutableSet<Vote> getPartyPreferences(Set<Party> parties)
 	{
 		List<Party> partyList = new ArrayList<>(parties);
-		
-		//shuffle the list of parties
+
+		//shuffle the list of parties to keep results random, since Collections.sort is stable
 		Collections.shuffle(partyList);
-		
+
 		//Create a list of parties with utility values
 		List<PartyWithIntValue> valueList = new ArrayList<>(parties.size());
-		
+
 		//find the utility value of each party and add it to the list
 		for(Party p : partyList)
 			valueList.add(new PartyWithIntValue(p, utilityValue(p)));
@@ -147,19 +149,19 @@ public class Voter
 		//sort the parties by value, highest first
 		Collections.sort(valueList, Collections.reverseOrder());
 
-		//create a new list with the parties in order of preference
-		List<Party> voteList = new ArrayList<>(parties.size());
-		
-		//insert the parties into it
-		for(PartyWithIntValue p : valueList)
-			voteList.add(p.getParty());
+		//create a new set containing this voter's votes
+		Set<Vote> votes = new HashSet<>(parties.size());
 
-		return Collections.unmodifiableList(voteList);
+		//insert the votes into it
+		for(int i=0; i<parties.size(); i++)
+			votes.add(new Vote(valueList.get(i).getParty(), i+1));
+
+		return ImmutableSet.<Vote>builder().addAll(votes).build();
 
 	}
-	
+
 	/**
-	 * Determines the utility value a given party would have for this voter. 
+	 * Determines the utility value a given party would have for this voter.
 	 * @param p the party.
 	 * @return the utility value the given party would have for this voter.
 	 */

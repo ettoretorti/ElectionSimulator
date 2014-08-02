@@ -8,7 +8,7 @@ public class Party
 	private final int econPol;
 	/** The party's competence value */
 	private final int competence;
-	
+
 	/**
 	 * Constructs a new party with the given parameters.
 	 * @param name the desired name for this party.
@@ -27,7 +27,7 @@ public class Party
 			throw new IllegalArgumentException("The economic policy is out of range");
 		if(competence < 0 || competence > 100)
 			throw new IllegalArgumentException("The competence is out of range");
-		
+
 		this.name = name;
 		this.socPol = socPol;
 		this.econPol = econPol;
@@ -51,7 +51,7 @@ public class Party
 	{
 		return socPol;
 	}
-	
+
 	/**
 	 * Returns the party's economic policy value.
 	 * @return the party's economic policy value.
