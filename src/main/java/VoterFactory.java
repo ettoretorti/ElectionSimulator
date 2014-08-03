@@ -1,15 +1,6 @@
 
 import java.util.Random;
 
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
-/**
- *
- * @author Ettore
- */
 public class VoterFactory
 {
 	/** The random number generator used to create new voters */
@@ -19,7 +10,7 @@ public class VoterFactory
 	 * Returns a new randomized voter.
 	 * @return a new randomized voter.
 	 */
-	public static Voter getRandomVoter()
+	public static Voter randomVoter()
 	{
 		int socPref  = (int) (randGen.nextDouble() * 101);
 		int econPref = (int) (randGen.nextDouble() * 101);
@@ -36,7 +27,7 @@ public class VoterFactory
 	public static void fillVoterArray(Voter[] array)
 	{
 		for(int i=0; i<array.length; i++)
-			array[i] = VoterFactory.getRandomVoter();
+			array[i] = VoterFactory.randomVoter();
 	}
 
 	/**
@@ -62,7 +53,8 @@ public class VoterFactory
 	 * values will return this value.
 	 * @return a normally distributed value with given mean and standard deviation.
 	 */
-	private static int discreteNormal(double mean, double dev, int lowerBound, int upperBound)
+	private static int discreteNormal(double mean, double dev,
+			                          int lowerBound, int upperBound)
 	{
 		double result = normalDistribution(mean, dev);
 
@@ -72,9 +64,9 @@ public class VoterFactory
 		return (int) Math.round(result);
 	}
 
-	private static double bivariateDistribution(double mean1,
-	                                            double dev1, double mean2,
-												double dev2, double mixFactor)
+	private static double bivariateNormalDistribution(double mean1,
+	                                                  double dev1, double mean2,
+	                                                  double dev2, double mixFactor)
 	{
 		double random = randGen.nextDouble();
 
@@ -84,12 +76,12 @@ public class VoterFactory
 			return normalDistribution(mean2, dev2);
 	}
 
-	private static double discreteBivariate(double mean1, double dev1,
-	                                        double mean2, double dev2,
-	                                        double mixFactor, int lowerBound,
-											int upperBound)
+	private static double discreteBivariateNormal(double mean1, double dev1,
+	                                              double mean2, double dev2,
+	                                              double mixFactor, int lowerBound,
+	                                              int upperBound)
 	{
-		double result = bivariateDistribution(mean1, dev1, mean2, dev2, mixFactor);
+		double result = bivariateNormalDistribution(mean1, dev1, mean2, dev2, mixFactor);
 
 		if(result < lowerBound) result = lowerBound;
 		if(result > upperBound) result = upperBound;
