@@ -1,7 +1,6 @@
 import com.google.common.collect.ImmutableSet;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -149,15 +148,15 @@ public class Voter
 		//sort the parties by value, highest first
 		Collections.sort(valueList, Collections.reverseOrder());
 
-		//create a new set containing this voter's votes
-		Set<Vote> votes = new HashSet<>(parties.size());
+		//start building an immutable set
+		ImmutableSet.Builder<Vote> setBuilder = ImmutableSet.builder();
 
-		//insert the votes into it
+		//add a vote for every party with the appropriate preference level
 		for(int i=0; i<parties.size(); i++)
-			votes.add(new Vote(valueList.get(i).getParty(), i+1));
+			setBuilder.add(new Vote(valueList.get(i).getParty(), i+1));
 
-		return ImmutableSet.<Vote>builder().addAll(votes).build();
-
+		//build the immutable set and return it
+		return setBuilder.build();
 	}
 
 	/**
