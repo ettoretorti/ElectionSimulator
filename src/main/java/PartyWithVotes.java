@@ -5,26 +5,17 @@ import com.google.common.collect.ImmutableMultiset;
 import com.google.common.collect.Multiset;
 import java.util.Collection;
 
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
-/**
- *
- * @author Ettore
- */
-public class PartyWithVotePreferences implements Comparable<PartyWithVotePreferences>
+public class PartyWithVotes implements Comparable<PartyWithVotes>
 {
 	private final ImmutableMultiset<Vote> votes;
 	private final Party party;
 	private final int minimumPreference;
 
-	public PartyWithVotePreferences(final Party party, Multiset<Vote> votes)
+	public PartyWithVotes(final Party party, Multiset<Vote> votes)
 	{
 		this.party = party;
 
-		//sort out the votes for this party out of all the rest
+		//sort out the votes for this party from all the rest
 		Predicate<Vote> isForThisParty = new Predicate<Vote>()
 		{
 			@Override
@@ -70,7 +61,7 @@ public class PartyWithVotePreferences implements Comparable<PartyWithVotePrefere
 	}
 
 	@Override
-	public int compareTo(PartyWithVotePreferences o)
+	public int compareTo(PartyWithVotes o)
 	{
 		int voteDifference = 0;
 
