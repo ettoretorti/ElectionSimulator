@@ -7,15 +7,26 @@ public class VoterFactory
 	private static Random randGen = new Random();
 
 	/**
+	 * Prevent instances of this class from being created by making the
+	 * constructor private
+	 */
+	private VoterFactory() {}
+
+	/**
 	 * Returns a new randomized voter.
 	 * @return a new randomized voter.
 	 */
 	public static Voter randomVoter()
 	{
-		int socPref  = (int) (randGen.nextDouble() * 101);
-		int econPref = (int) (randGen.nextDouble() * 101);
+		int socPref  = discreteBivariateNormal(30, 4, 70, 4, 0.5, 0, 100);
+
+		//the amount to shift the mean for economic preference based on social
+		//preference
+		double shiftValue = (socPref - 50) * (double)2/5;
+		int econPref  = discreteNormal(50 + shiftValue, 20, 0, 100);
+
 		int prefRatio = discreteNormal(50, 16, 0, 100);
-		int compRatio = discreteNormal(32, 16, 0, 100);
+		int compRatio = discreteNormal(25, 12.5, 0, 100);
 
 		return new Voter(socPref, econPref, prefRatio, compRatio);
 	}
@@ -76,10 +87,10 @@ public class VoterFactory
 			return normalDistribution(mean2, dev2);
 	}
 
-	private static double discreteBivariateNormal(double mean1, double dev1,
-	                                              double mean2, double dev2,
-	                                              double mixFactor, int lowerBound,
-	                                              int upperBound)
+	private static int discreteBivariateNormal(double mean1, double dev1,
+	                                           double mean2, double dev2,
+	                                           double mixFactor, int lowerBound,
+	                                           int upperBound)
 	{
 		double result = bivariateNormalDistribution(mean1, dev1, mean2, dev2, mixFactor);
 
