@@ -15,13 +15,13 @@ import java.util.Set;
 public class Election
 {
 	/** A variable to keep track of whether the election has been run. */
-	private boolean isComplete;
+	protected boolean isComplete;
 	/** The set of parties participating in this election. */
 	private Set<Party> parties;
 	/** The set of voters participating in this election. */
 	private Set<Voter> voters;
 
-	private ImmutableList<PartyWithVotePreferences> electionResults;
+	private ImmutableList<PartyWithVotes> electionResults;
 
 	private Multiset<Vote> allVotes;
 
@@ -43,6 +43,24 @@ public class Election
 	public boolean addVoter(Voter v)
 	{
 		return voters.add(v);
+	}
+
+	/**
+	 * Returns an immutable set containing the voters currently participating in this election.
+	 * @return an immutable set containing the voters current participating in this election.
+	 */
+	public ImmutableSet<Voter> getVoters()
+	{
+		return ImmutableSet.<Voter>builder().addAll(voters).build();
+	}
+
+	/**
+	 * Returns an immutable set containing the parties currently participating in this election.
+	 * @return an immutable set containing the parties currently participating in this election.
+	 */
+	public ImmutableSet<Party> getParties()
+	{
+		return ImmutableSet.<Party>builder().addAll(parties).build();
 	}
 
 	/**
@@ -164,7 +182,7 @@ public class Election
 	/**
 	 * Runs the election, stores the results, and sets the complete flag to true.
 	 */
-	public void runElection()
+	public void run()
 	{
 		//reset the votes
 		allVotes.clear();
@@ -177,18 +195,18 @@ public class Election
 		}
 
 		//create a list to hold the results of all parties
-		List<PartyWithVotePreferences> partyResults = new ArrayList<>(parties.size());
+		List<PartyWithVotes> partyResults = new ArrayList<>(parties.size());
 
 		//add all the party results to the list
 		for(Party p : parties)
-			partyResults.add(new PartyWithVotePreferences(p, allVotes));
+			partyResults.add(new PartyWithVotes(p, allVotes));
 
 		//sort it into ascending order
 		Collections.sort(partyResults, Collections.reverseOrder());
 
 		//return an immutable copy of it
 		electionResults = ImmutableList.
-				<PartyWithVotePreferences>builder().addAll(partyResults)
+				<PartyWithVotes>builder().addAll(partyResults)
 				                                   .build();
 
 		isComplete = true;
@@ -196,14 +214,55 @@ public class Election
 
 	/**
 	 * Returns the results of this election.
-	 * @return A list of parties with vote preferences sorted in descending order.
+	 * @return A list of parties with votes sorted in descending order.
 	 * @throws IncompleteElectionException if the election is not complete.
 	 */
-	public ImmutableList<PartyWithVotePreferences> getElectionResults() throws IncompleteElectionException
+	public ImmutableList<PartyWithVotes> results() throws IncompleteElectionException
 	{
 		if(!isComplete) throw new IncompleteElectionException();
 
 		return electionResults;
+	}
+
+	/**
+	 * Returns the number of votes for this party with a certain choice.
+	 * @param p the party whose votes to count.
+	 * @param choice count only votes representing this choice.
+	 * @return the number of votes for this party as a first choice.
+	 * @throws IncompleteElectionException if the election hasn't been run.
+	 */
+	public int votesForParty(Party p, int choice) throws IncompleteElectionException
+	{
+		for(PartyWithVotes party : results())
+			if(party.getParty() == p) return party.getVotes(choice);
+
+		return 0;
+	}
+
+	/**
+	 * Returns the percentage of votes for this party with a certain choice out of
+	 * all the votes for that choice.
+	 * @param p the party whose votes to count.
+	 * @param choice count only votes representing this choice.
+	 * @return a number from 0-100 representing the percentage of votes.
+	 * @throws IncompleteElectionException if the election hasn't been run.
+	 */
+	public double percentageVotesForParty(Party p, int choice) throws IncompleteElectionException
+	{
+		for(PartyWithVotes party : results())
+			if(party.getParty() == p) return 100.0*party.getVotes(choice)/noVoters();
+
+		return 0;
+	}
+
+	public ImmutableList<PartyWithDoubleValue> seatResults() throws IncompleteElectionException
+	{
+		ImmutableList.Builder<PartyWithDoubleValue> listBuilder = ImmutableList.builder();
+
+		for(PartyWithVotes p : results())
+			listBuilder.add(new PartyWithDoubleValue(p.getParty(), 100.0*p.getVotes(1)/noVoters()));
+
+		return listBuilder.build();
 	}
 
 	/**
@@ -219,19 +278,20 @@ public class Election
 	 * Returns a string with the results of this election.
 	 * @return a string with the results of this election.
 	 */
-	public String results()
+	@Override
+	public String toString()
 	{
 		if(!isComplete())
 			return "This election isn't complete.";
 
 		String buffer = "Generic Election Results\n"
 				      + "========================\n";
-		for(PartyWithVotePreferences p : getElectionResults())
+		for(PartyWithVotes p : results())
 			buffer += p + "\n";
 
 		buffer += voterStats();
 
-		Party winningParty = getElectionResults().get(0).getParty();
+		Party winningParty = results().get(0).getParty();
 		buffer += "Average distance from winning party: " + avgDistanceFromParty(winningParty) + "\n";
 
 		return buffer;
@@ -249,5 +309,23 @@ public class Election
 		buffer += "Average Social Pref: " + avgSocialPreference() + "\n";
 
 		return buffer;
+	}
+
+	/**
+	 * Returns the number of voters participating in the election.
+	 * @return the number of voters participating in the election.
+	 */
+	public int noVoters()
+	{
+		return voters.size();
+	}
+
+	/**
+	 * Returns the number of parties participating in the election.
+	 * @return the number of parties participating in the election.
+	 */
+	public int noParties()
+	{
+		return parties.size();
 	}
 }
