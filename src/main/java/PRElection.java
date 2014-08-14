@@ -19,19 +19,19 @@ public class PRElection extends Election
 	}
 
 	@Override
-	public String results()
+	public String toString()
 	{
 		if(!isComplete())
 			return "This election isn't complete.";
 
 
 		//get the election results
-		ImmutableList<PartyWithVotePreferences> results = getElectionResults();
+		ImmutableList<PartyWithVotes> results = results();
 
 		//create a list of parties and the first preference votes they got
 		List<PartyWithIntValue> firstVotes = new ArrayList<>(results.size());
 		//add all the parties and votes to the list
-		for(PartyWithVotePreferences p : results)
+		for(PartyWithVotes p : results)
 		firstVotes.add(new PartyWithIntValue(p.getParty(), p.getVotes(1)));
 		//sort it by votes in descending order
 		Collections.sort(firstVotes, Collections.reverseOrder());
