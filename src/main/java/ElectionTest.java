@@ -20,7 +20,7 @@ public class ElectionTest
 		election.addParties(parties);
 
 		//run the election and print its results
-		election.runElection();
-		System.out.println(election.results());
+		election.run();
+		System.out.println(election.toString());
 	}
 }
