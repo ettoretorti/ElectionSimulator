@@ -166,10 +166,11 @@ public class Voter
 	 */
 	public int utilityValue(Party p)
 	{
-		int policyValue = (getEconomicDifference(p) * prefRatio
-		                 + getSocialDifference(p) * (100 - prefRatio)) / 100;
+		int policyValue = (int) Math.round((getEconomicDifference(p) * prefRatio
+		                 + getSocialDifference(p) * (100 - prefRatio)) / 100.0);
 
-		int finalValue = (p.getCompetence() * compRatio - policyValue * (100 - compRatio)) / 100;
+		int finalValue = (int) Math.round((p.getCompetence() * compRatio
+		                 - policyValue * (100 - compRatio)) / 100.0);
 
 		return finalValue;
 	}
