@@ -15,8 +15,10 @@ public class Party
 	 * @param socPol the desired social policy value for this party.
 	 * @param econPol the desired economic policy value for this party.
 	 * @param competence the desired competence value for this party.
+	 * @throws IllegalArgumentException if any of the integer values are out of
+	 * range or if the name is null;
 	 */
-	public Party(String name, int socPol, int econPol, int competence)
+	public Party(String name, int socPol, int econPol, int competence) throws IllegalArgumentException
 	{
 		//ensure everything is in range or throw an exception
 		if(name == null)
