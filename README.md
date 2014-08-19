@@ -1,25 +1,34 @@
 ElectionSimulator
 =================
 
-A project to simulate various types of elections from individual voter level. It works by providing giving each voter a list of available parties having it return a list with the same parties ordered by preference. At this point all the votes are run through a certain electoral system and results for that election are displayed.
+This project simulates various types of electoral systems. We take into account
+simple models of voter preferences and behaviour, together with party
+characteristics. Each voter is thus mapped to a party (unless the voter decides
+to abstain from voting). The various electoral systems then map percentage votes
+to percentage seats in Parliament. 
 
-A brief outline of the interacing parts and their inner workings can be found below.
+Aim
+---
+
+To explore the workings of various electoral systems, and to establish which
+systems are the most representative (i.e. which systems distort percentage votes
+least when transforming them into percentage seats).
+
+Outline
+-------
+
+The following sections introduce the key elements of the election simulator. 
+More thorough explanations are available in the specifications.
 
 
 Voters
 ------
-Voters are individuals that participate in elections. They take their preferences and compare them to parties' policies to build their list of preferences.
-
-A voter possesses the following characteristics:
-
- * **Social Preference**: an integer from 0-100 inclusive which reflects the voter's opinion on social issues. A value of 0 would indicate completely left wing policy and a value of 100 would indicate completely right wing policy.
-
- * **Economic Preference**: an integer from 0-100 inclusive which reflects the voter's opinion on economic issues. A value of 0 would indicate completely left wing policy and a value of 100 would indicate completely right wing policy.
-
- * **Preference Ratio**: an integer from 0-100 inclusive used to determine how much weight the voter gives to his social and economic preferences. A value of 0 would indicate the voter only cares about social policy, while a value of 100 would indicate the voter only cares about economic policy.
-
- * **Competence Ratio**: an integer from 0-100 inclusive used to determine how much weight the voter places on parties' perceived competences compared to their social and economic policies. A value of 0 would indicate the voter does not care about competence at all, while a value of 100 would indicate the voter only cares about competence.
-
+Voters choose which party to vote according to their preferences and the 
+characteristics of available parties. Voters prefer parties which are closer to
+them on the left-right social and economic preferences scales. Most voters also
+prefer parties which are perceived to be more competent. Finally, voters can
+care about other characteristics, such as whether a party supports their region
+or whether the party has a strong view on environmental issues. 
 
 Parties
 -------
@@ -27,37 +36,60 @@ Parties are the entities voters elect.
 
 A party possesses the following characteristics:
 
-  * **Social Policy**: an integer from 0-100 inclusive which reflects the party's standing on social issues. A value of 0 indicates completely left wing policy and a value of 100 indicates completely right wing policy.
+ * **Social Policy**: an integer from 0-100 inclusive which reflects the
+     party's standing on social issues. A value of 0 indicates completely left
+     wing policy and a value of 100 indicates completely right wing policy.
 
-  * **Economic Policy**: an integer from 0-100 inclusive which reflects the party's standing on economic issues. A value of 0 indicates completely left wing policy and a value of 100 indicates completely right wing policy.
+ * **Economic Policy**: an integer from 0-100 inclusive which reflects the
+     party's standing on economic issues. A value of 0 indicates completely left
+     wing policy and a value of 100 indicates completely right wing policy.
 
-  * **Perceived Competence**: an integer from 0-100 inclusive which reflects how competent the voters believe this party to be. A higher value indicates more competence.
+ * **Perceived Competence**: an integer from 0-100 inclusive which reflects how
+     competent the voters believe this party to be. A higher value indicates
+     more competence.
 
 
 Coalitions
 ----------
-If no party manages to establish a governing majority at the end of an election the parties will attempt to form coalitions to gain the majority. Coalitions will be formed under the following assumptions:
+If no party manages to establish a governing majority at the end of an election
+the parties will attempt to form coalitions to gain the majority. Coalitions
+will be formed under the following assumptions:
 
-  * A party will prefer to form a coalition with the smallest amount of other parties required to give it a governing majority.
+ * A party will prefer to form a coalition with the smallest amount of other
+   parties required to give it a governing majority.
 
-  * A party will prefer to form a coalition in which is has the largest proportion of the total representation.
+ * A party will prefer to form a coalition in which is has the largest
+   proportion of the total representation.
 
-  * A party will prefer to form coalitions with parties that are near it in terms of social and economic policy.
+ * A party will prefer to form coalitions with parties that are near it in terms
+   of social and economic policy.
 
-  * A party will prefer to form coalitions with parties with a high perceived competence.
+ * A party will prefer to form coalitions with parties with a high perceived
+   competence.
 
 
 Elections
 ---------
-Elections are the process through which the voters select parties to represent them. This project aims to deliver different sorts of elections of varying simplicity.
+Elections are the process through which the voters select parties to represent
+them. This project aims to deliver different sorts of elections of varying
+complexity.
 
-The list of different electoral systems to be supported is as follows:
+The main types of electoral systems to be supported are:
 
-  * **Proportional Representation**: an electoral system in which parties get a representation in government proportional to the amount of votes received.
+ * **Proportional representation**: all parties obtain a percentage of seats
+     which is directly proportional to the percentage of votes received. No
+     party is over-represented or under-represented. The only exception to this
+     rule occurs if there is a lower boundary to the percentage of votes
+     necessary to enter parliament. 
 
-  * **Majoritarian**: an electoral system in which the party with the majority gets complete representation while others get none.
+ * **Majoritarian**: the party which gets the most votes is over-represented, 
+     while all other parties are under-represented.
 
-  * **N rounds**: an electoral system that consists of N rounds, with the lowest polling parties being eliminated at each round and the rest entering the next until only one remains.
-
-
- These ideas can be merged together to come up with many sorts of unique electoral systems.
+ * **N rounds**: consists of N rounds, with the lowest polling parties being
+     eliminated at each round and the rest entering the next until only one
+     remains. The largest party/parties are over-represented, while the smaller
+     ones are under-represented.
+     
+ * **First past the post**: the country is divided into districts. The party
+     which gets the most votes in a district gets all the seats reserved for
+     that district. 
