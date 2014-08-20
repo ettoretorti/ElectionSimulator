@@ -49,25 +49,6 @@ A party possesses the following characteristics:
      more competence.
 
 
-Coalitions
-----------
-If no party manages to establish a governing majority at the end of an election
-the parties will attempt to form coalitions to gain the majority. Coalitions
-will be formed under the following assumptions:
-
- * A party will prefer to form a coalition with the smallest amount of other
-   parties required to give it a governing majority.
-
- * A party will prefer to form a coalition in which is has the largest
-   proportion of the total representation.
-
- * A party will prefer to form coalitions with parties that are near it in terms
-   of social and economic policy.
-
- * A party will prefer to form coalitions with parties with a high perceived
-   competence.
-
-
 Elections
 ---------
 Elections are the process through which the voters select parties to represent
@@ -93,3 +74,21 @@ The main types of electoral systems to be supported are:
  * **First past the post**: the country is divided into districts. The party
      which gets the most votes in a district gets all the seats reserved for
      that district. 
+   
+Coalitions
+----------
+If no party manages to establish a governing majority at the end of an election
+the parties will attempt to form coalitions to gain the majority. Coalitions
+will be formed under the following assumptions:
+
+ * A party will prefer to form a coalition with the smallest amount of other
+   parties required to give it a governing majority.
+
+ * A party will prefer to form a coalition with smaller parties rather than 
+   larger ones, to maximize its influence on policy decisions.
+
+ * A party will prefer to form coalitions with parties that are close to it in
+   terms of social and economic policy.
+
+ * A party will prefer to form coalitions with parties with a high perceived
+   competence.
