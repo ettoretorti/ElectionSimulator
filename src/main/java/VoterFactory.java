@@ -18,12 +18,12 @@ public class VoterFactory
 	 */
 	public static Voter randomVoter()
 	{
-		int socPref  = discreteBivariateNormal(30, 4, 70, 4, 0.5, 0, 100);
+		int socPref  = discreteBivariateNormal(30, 10, 70, 10, 0.5, 0, 100);
 
 		//the amount to shift the mean for economic preference based on social
 		//preference
-		double shiftValue = (socPref - 50) * (double)2/5;
-		int econPref  = discreteNormal(50 + shiftValue, 20, 0, 100);
+		double shiftValue = (socPref - 50) * 4.0/5;
+		int econPref  = discreteNormal(50 + shiftValue, 10, 0, 100);
 
 		int prefRatio = discreteNormal(50, 16, 0, 100);
 		int compRatio = discreteNormal(25, 12.5, 0, 100);
